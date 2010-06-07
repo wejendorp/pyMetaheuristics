@@ -1,0 +1,9 @@
+This project is intended to help visualize different convex hull algorithms.
+
+Prerequisite software: Python, available from python.org
+                       PyGame, available from pygame.org
+
+To run the program, run ConvexHull.py.
+
+For help on the command-line arguments accepted, run:
+    ConvexHull.py --help
