@@ -1,9 +1,9 @@
-This project is intended to help visualize different convex hull algorithms.
+This project is intended to help visualize different metaheuristic graph-algorithms
 
 Prerequisite software: Python, available from python.org
                        PyGame, available from pygame.org
 
-To run the program, run ConvexHull.py.
+To run the program, run Metaheuristics.py. (Currently only works with a file input -f)
 
 For help on the command-line arguments accepted, run:
-    ConvexHull.py --help
+    Metaheuristic.py --help
