@@ -10,7 +10,6 @@ class TabuSearch(MetaAlgorithm):
     def execute(self):
         self.c = 0
         i = 0
-        self.solutionval = self.solution.assess()
         best = self.solution
         bestval = self.solutionval
         self.TabuList = []
@@ -18,24 +17,24 @@ class TabuSearch(MetaAlgorithm):
         while i < 1000:
             self.c += 1
             #Remove old Tabu Entries
-            self.TabuList = self.removeOld()
+            self.removeOld()
             # Preprocess
-            R = copy.deepcopy(self.solution)
-            Rtw = R.tweak()
+            R = copy.copy(self.solution)
+            Rtw = self.solutionspace.tweak(R)
             r = []
             for gfh in range(0,self.n-1):
-                r.append(copy.deepcopy(self.solution))
+                r.append(copy.copy(self.solution))
                 
             # Algorithm:
             for W in r:
-                tw = W.tweak()
-                if not self.isTabu(tw) and (W.assess() < R.assess() or self.isTabu(Rtw)):
+                tw = self.solutionspace.tweak(W)
+                if not self.isTabu(tw) and (self.solutionspace.value(W) < self.solutionspace.value(R) or self.isTabu(Rtw)):
                     R = W
                     Rtw = tw
                     
-            if not self.isTabu(Rtw) and R.assess() < self.solutionval:
+            if not self.isTabu(Rtw) and self.solutionspace.value(R) < self.solutionval:
                 self.solution = R
-                self.solutionval = R.assess()
+                self.solutionval = self.solutionspace.value(R)
                 self.makeTabu(Rtw)
                 yield
                 
@@ -62,4 +61,6 @@ class TabuSearch(MetaAlgorithm):
         
     def removeOld(self):
         def live((_,age)): return self.c-age < self.l
-        return filter(live, self.TabuList)
+        while len(self.TabuList) and not live(self.TabuList[0]):
+            self.TabuList.pop(0)
+        

@@ -10,21 +10,21 @@ class SimulatedAnnealing(MetaAlgorithm):
         i = 0
         best = []
         bestval = -1
-        self.solutionval = self.solution.assess()
         yield
-        while i < 1000:
-            r = copy.deepcopy(self.solution)
-            r.tweak()
-            rval = r.assess()
-            if rval < self.solutionval or t > 0 and random() < exp((rval-self.solutionval)/t):
+        while i < 2000:
+            r = self.solution[:]
+            self.solutionspace.tweak(r)
+            rval = self.solutionspace.value(r)
+            if rval < self.solutionval or t > 0 and random() < 2**(rval-self.solutionval)/t:
                 self.solution = r
                 self.solutionval = rval
                 i = 0
+                t=t*0.45
                 yield
             if bestval == -1 or self.solutionval < bestval:
                 best = self.solution
                 bestval = self.solutionval
-            t-=0.01
+       	    
             i+=1
         self.solution = best
         self.solutionval = bestval
